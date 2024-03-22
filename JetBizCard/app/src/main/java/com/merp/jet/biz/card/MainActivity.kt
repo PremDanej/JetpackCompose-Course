@@ -1,6 +1,8 @@
 package com.merp.jet.biz.card
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -76,12 +79,43 @@ fun CreateBizCard() {
             ) {
                 CreateImageProfile()
                 Divider()
-
+                CreateInfo()
             }
         }
 
     }
 
+}
+
+@Composable
+fun CreateInfo() {
+    Column(modifier = Modifier.padding(5.dp)) {
+        Text(
+            text = "Prem Danej",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = "Android Application Developer",
+            modifier = Modifier.padding(3.dp),
+            style = MaterialTheme.typography.labelLarge
+        )
+        Text(
+            text = "@PremDanej",
+            modifier = Modifier.padding(3.dp),
+            style = MaterialTheme.typography.labelLarge
+        )
+
+    }
+    Column(modifier = Modifier.padding(top = 10.dp)) {
+        Button(
+            onClick = {
+                Log.d("=======>", "Button clicked")
+            }, shape = RoundedCornerShape(0.dp)
+        ) {
+            Text(text = "Portfolio")
+        }
+    }
 }
 
 @Composable
