@@ -1,7 +1,6 @@
 package com.merp.jet.tip.app
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,11 +23,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,16 +43,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.merp.jet.tip.app.components.InputField
+import com.merp.jet.tip.app.ui.theme.JetTipAppTheme
+import com.merp.jet.tip.app.util.calculateTotalPerPerson
+import com.merp.jet.tip.app.util.calculateTotalTip
 import com.merp.jet.tip.app.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp {
-                TopHeader()
+            JetTipAppTheme {
+                MyApp {
+                    MainContent()
+                }
             }
-
         }
     }
 }
@@ -62,12 +70,12 @@ fun MyApp(content: @Composable () -> Unit) {
 }
 
 
-@Preview()
 @Composable
-fun TopHeader(totalPerPerson: Double = 10.0) {
+fun TopHeader(totalPerPerson: Double = 0.0) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(10.dp)
             .height(150.dp)
             .clip(shape = CircleShape.copy(all = CornerSize(20.dp)))
             .background(color = Color.Blue),
@@ -77,12 +85,10 @@ fun TopHeader(totalPerPerson: Double = 10.0) {
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        )
-        {
+        ) {
             val total = "%.2f".format(totalPerPerson)
             Text(
-                text = "Total Per Person",
-                style = MaterialTheme.typography.headlineSmall
+                text = "Total Per Person", style = MaterialTheme.typography.headlineSmall
             )
             Text(
                 text = "₹${total}",
@@ -96,16 +102,32 @@ fun TopHeader(totalPerPerson: Double = 10.0) {
 @Preview(showBackground = true)
 @Composable
 fun MainContent() {
-    BillForm() { billAmount ->
-        Log.d("AMT", "MainContent $billAmount")
+
+    val splitByState = remember { mutableIntStateOf(1) }
+    val range = IntRange(1, 100)
+    val tipAmountState = remember { mutableDoubleStateOf(0.0) }
+    val totalPerPersonState = remember { mutableDoubleStateOf(0.0) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopHeader(totalPerPerson = totalPerPersonState.doubleValue)
+        BillForm(
+            modifier = Modifier,
+            range = range,
+            splitByState = splitByState,
+            tipAmountState = tipAmountState,
+            totalPerPersonState = totalPerPersonState
+        ) { }
     }
 
 }
 
-@Preview(showBackground = true)
 @Composable
 fun BillForm(
     modifier: Modifier = Modifier,
+    range: IntRange = 1..100,
+    splitByState: MutableState<Int>,
+    tipAmountState: MutableState<Double>,
+    totalPerPersonState: MutableState<Double>,
     onValChange: (String) -> Unit = { }
 ) {
 
@@ -113,12 +135,12 @@ fun BillForm(
     val validState = remember(totalBillState.value) {
         totalBillState.value.trim().isNotEmpty()
     }
-    val counter = remember {
-        mutableStateOf(0)
-    }
+    val sliderPositionState = remember { mutableFloatStateOf(0f) }
+    val tipPercentage = (sliderPositionState.floatValue * 100).toInt()
     val keyboardController = LocalSoftwareKeyboardController.current
+
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(12.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -127,8 +149,7 @@ fun BillForm(
         Column(
             modifier = Modifier.padding(10.dp),
         ) {
-            InputField(
-                valueState = totalBillState,
+            InputField(valueState = totalBillState,
                 label = "Enter Bill",
                 enabled = true,
                 isSingleLine = true,
@@ -138,7 +159,8 @@ fun BillForm(
                     keyboardController?.hide()
                 })
 
-            if (!validState) {
+            if (validState) {
+
                 Row(
                     modifier = Modifier.padding(10.dp),
                     horizontalArrangement = Arrangement.Center,
@@ -153,111 +175,72 @@ fun BillForm(
                         modifier = Modifier.padding(horizontal = 3.dp),
                         horizontalArrangement = Arrangement.Center,
                     ) {
-                        RoundIconButton(
-                            imageVector = Icons.Default.Remove,
+                        RoundIconButton(imageVector = Icons.Default.Remove,
                             modifier = Modifier.size(50.dp),
                             onClick = {
-                                if(counter.value > 0){
-                                    counter.value--
-                                }
-                                Log.d("ICON ", "Icon plus pressed")
+                                splitByState.value =
+                                    if (splitByState.value > 1) splitByState.value - 1 else 1
+                                totalPerPersonState.value = calculateTotalPerPerson(
+                                    totalBillState.value.toDouble(),
+                                    splitByState.value,
+                                    tipPercentage
+                                )
                             })
 
                         Text(
-                            text = "${counter.value}",
+                            text = "${splitByState.value}",
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
                                 .padding(horizontal = 10.dp)
                         )
 
-                        RoundIconButton(
-                            imageVector = Icons.Default.Add,
+                        RoundIconButton(imageVector = Icons.Default.Add,
                             modifier = Modifier.size(50.dp),
                             onClick = {
-                                counter.value++
-                                Log.d("ICON ", "Icon minus pressed")
+                                if (splitByState.value < range.last) splitByState.value++
+                                totalPerPersonState.value = calculateTotalPerPerson(
+                                    totalBillState.value.toDouble(),
+                                    splitByState.value,
+                                    tipPercentage
+                                )
                             })
                     }
                 }
-            } else {
-                Box {
 
+                Row(modifier = Modifier.padding(horizontal = 10.dp)) {
+                    Text(text = "Tip")
+                    Spacer(modifier = Modifier.width(200.dp))
+                    Text(text = "₹ ${tipAmountState.value}")
                 }
+
+                Column(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "$tipPercentage %")
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Slider(value = sliderPositionState.floatValue, onValueChange = { newVal ->
+                        sliderPositionState.floatValue = newVal
+                        tipAmountState.value = calculateTotalTip(
+                            totalBillState.value.toDouble(),
+                            tipPercentage
+                        )
+
+                        totalPerPersonState.value = calculateTotalPerPerson(
+                            totalBillState.value.toDouble(),
+                            splitByState.value,
+                            tipPercentage
+                        )
+                    })
+                }
+
+            } else {
+                Box {}
             }
         }
-    }
-
-}
-
-
-@Composable
-fun TextPreview() {
-    Column(
-        modifier = Modifier.padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    )
-    {
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.headlineLarge
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.displayLarge
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.displayMedium
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.displaySmall
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.titleSmall
-        )
-
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.labelLarge
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.labelMedium
-        )
-        Text(
-            text = "Hello Prem",
-            style = MaterialTheme.typography.labelSmall
-        )
     }
 }
