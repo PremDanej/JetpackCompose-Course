@@ -1,12 +1,15 @@
 package com.merp.jet.movie
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -95,27 +98,35 @@ fun MainContent(
     )
 ) {
 
-    Column(modifier = Modifier.padding(12.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         LazyColumn() {
             items(items = movieList) {
-                MovieRow(movie = it)
+                MovieRow(movie = it){ movie ->
+                    Log.d("TAG MOVIE", movie)
+                }
             }
         }
     }
 }
 
 @Composable
-fun MovieRow(movie: String) {
+fun MovieRow(movie: String, onItemClick : (String) -> Unit = {}) {
     Card(
         modifier = Modifier
             .padding(horizontal = 4.dp, vertical = 10.dp)
             .fillMaxWidth()
-            .height(130.dp),
+            .height(130.dp)
+            .clickable {
+                onItemClick(movie)
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -124,7 +135,7 @@ fun MovieRow(movie: String) {
                     .padding(10.dp)
                     .size(100.dp),
                 shape = RectangleShape,
-                tonalElevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Movie Image")
             }
