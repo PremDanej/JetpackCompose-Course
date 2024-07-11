@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.merp.jet.movie.navigation.MovieNavigation
 import com.merp.jet.movie.ui.theme.JetMovieTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +49,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApp {
-                MainContent()
+
+                MovieNavigation()
             }
         }
     }
@@ -58,56 +60,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(content: @Composable () -> Unit) {
     JetMovieTheme {
-        Scaffold(
-            modifier = Modifier,
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Movie") },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
-            },
-            content = { paddingValues ->
-                Column(modifier = Modifier.padding(paddingValues)) {
-                    content()
-                }
-            }
-        )
+        content()
     }
 }
 
-@Composable
-fun MainContent(
-    movieList: List<String> = listOf(
-        "Captain America",
-        "Iron Man",
-        "Thor",
-        "Iron Man 2",
-        "Avenger",
-        "Iron Man 3",
-        "Guardians of the Galaxy 1",
-        "Captain America Winter Soldier",
-        "Avenger Age of Ultron",
-        "Guardians of the Galaxy 2",
-        "Avenger Civil War",
-        "Avenger Infinity War",
-        "Avenger End Game",
-        "Thor Love and Thunder",
-        "Avenger Secret War"
-    )
-) {
-
-    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-        LazyColumn() {
-            items(items = movieList) {
-                MovieRow(movie = it){ movie ->
-                    Log.d("TAG MOVIE", movie)
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun MovieRow(movie: String, onItemClick : (String) -> Unit = {}) {
@@ -151,7 +107,7 @@ fun MovieRow(movie: String, onItemClick : (String) -> Unit = {}) {
 @Composable
 fun GreetingPreview() {
     MyApp {
-        MainContent()
+        MovieNavigation()
     }
     /*JetMovieTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
