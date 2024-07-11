@@ -2,13 +2,13 @@ package com.merp.jet.movie.navigation
 
 enum class MovieScreens {
     HomeScreen,
-    DetailScreen;
+    DetailsScreen;
 
     companion object{
         fun fromRoute(route : String?) : MovieScreens
         = when(route?.substringBefore("/")){
             HomeScreen.name -> HomeScreen
-            DetailScreen.name -> DetailScreen
+            DetailsScreen.name -> DetailsScreen
             null -> HomeScreen
             else -> throw IllegalArgumentException("Route $route is not recognise")
         }

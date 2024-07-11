@@ -1,8 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.merp.jet.movie.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,8 +18,9 @@ import androidx.navigation.NavController
 import com.merp.jet.movie.MovieRow
 import com.merp.jet.movie.navigation.MovieScreens
 
+@ExperimentalMaterial3Api
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier,
         topBar = {
@@ -63,10 +62,10 @@ fun MainContent(
 ) {
 
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-        LazyColumn() {
+        LazyColumn {
             items(items = movieList) {
-                MovieRow(movie = it){ movie ->
-                    navController.navigate(route = MovieScreens.DetailScreen.name)
+                MovieRow(movie = it) { movie ->
+                    navController.navigate(route = MovieScreens.DetailsScreen.name + "/$movie")
                 }
             }
         }
