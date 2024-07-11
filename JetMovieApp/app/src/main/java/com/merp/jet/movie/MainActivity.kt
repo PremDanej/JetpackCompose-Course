@@ -53,7 +53,6 @@ fun MyApp(content: @Composable () -> Unit) {
     }
 }
 
-
 @Composable
 fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
     Card(
@@ -89,7 +88,6 @@ fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
         }
     }
 }
-
 
 @ExperimentalMaterial3Api
 @Preview(showBackground = true)
