@@ -1,4 +1,3 @@
-
 package com.merp.jet.movie.screens.home
 
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.merp.jet.movie.MovieRow
+import com.merp.jet.movie.model.Movie
+import com.merp.jet.movie.model.getMovies
 import com.merp.jet.movie.navigation.MovieScreens
+import com.merp.jet.movie.widgets.MovieRow
 
 @ExperimentalMaterial3Api
 @Composable
@@ -42,25 +43,8 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun MainContent(
     navController: NavController,
-    movieList: List<String> = listOf(
-        "Captain America",
-        "Iron Man",
-        "Thor",
-        "Iron Man 2",
-        "Avenger",
-        "Iron Man 3",
-        "Guardians of the Galaxy 1",
-        "Captain America Winter Soldier",
-        "Avenger Age of Ultron",
-        "Guardians of the Galaxy 2",
-        "Avenger Civil War",
-        "Avenger Infinity War",
-        "Avenger End Game",
-        "Thor Love and Thunder",
-        "Avenger Secret War"
-    )
+    movieList: List<Movie> = getMovies()
 ) {
-
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         LazyColumn {
             items(items = movieList) {

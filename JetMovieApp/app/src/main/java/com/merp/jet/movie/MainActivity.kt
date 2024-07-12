@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.merp.jet.movie.model.Movie
 import com.merp.jet.movie.navigation.MovieNavigation
 import com.merp.jet.movie.ui.theme.JetMovieTheme
 
@@ -53,41 +54,6 @@ fun MyApp(content: @Composable () -> Unit) {
     }
 }
 
-@Composable
-fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 4.dp, vertical = 10.dp)
-            .fillMaxWidth()
-            .height(130.dp)
-            .clickable {
-                onItemClick(movie)
-            },
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(corner = CornerSize(8.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Surface(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .size(100.dp),
-                shape = RectangleShape,
-                shadowElevation = 4.dp
-            ) {
-                Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Movie Image")
-            }
-
-            Text(text = movie)
-        }
-    }
-}
 
 @ExperimentalMaterial3Api
 @Preview(showBackground = true)
