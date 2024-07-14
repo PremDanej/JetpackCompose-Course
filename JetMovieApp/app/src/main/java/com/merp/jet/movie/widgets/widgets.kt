@@ -53,7 +53,7 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
             .padding(horizontal = 4.dp, vertical = 10.dp)
             .fillMaxWidth()
             .clickable {
-                onItemClick(movie.title)
+                onItemClick(movie.id)
             },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -61,8 +61,7 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -71,7 +70,7 @@ fun MovieRow(movie: Movie = getMovies()[0], onItemClick: (String) -> Unit = {}) 
                     .padding(10.dp)
                     .size(100.dp),
                 shape = RectangleShape,
-                shadowElevation = 4.dp
+                color = Color.Transparent
             ) {
                 Image(
                     painter = rememberImagePainter(data = movie.poster, builder =
