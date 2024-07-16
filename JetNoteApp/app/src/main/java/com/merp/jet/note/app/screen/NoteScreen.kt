@@ -1,12 +1,21 @@
 package com.merp.jet.note.app.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,10 +34,18 @@ import androidx.compose.ui.unit.dp
 import com.merp.jet.note.app.R
 import com.merp.jet.note.app.componenets.NoteButton
 import com.merp.jet.note.app.componenets.NoteInputText
+import com.merp.jet.note.app.data.NoteDataSource
+import com.merp.jet.note.app.model.Note
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
-fun NoteScreen() {
+fun NoteScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
+) {
     var title by remember {
         mutableStateOf("")
     }
@@ -61,25 +79,72 @@ fun NoteScreen() {
                         title = it
                 })
 
-
             NoteInputText(
                 modifier = Modifier
                     .padding(10.dp),
                 text = description,
                 label = "Description",
                 onTextChange = {
-                    if(it.all { char -> char.isLetter() || char.isWhitespace() })
+                    if (it.all { char -> char.isLetter() || char.isWhitespace() })
                         description = it
                 })
 
-            NoteButton(text = "Save", onClick = {})
+            NoteButton(text = stringResource(id = R.string.lbl_save), onClick = {
+                if (title.isNotEmpty() && description.isNotEmpty()) {
+                    // save the list
+                    title = ""
+                    description = ""
+                }
+            })
+
+            HorizontalDivider(modifier = Modifier.padding(10.dp))
+            LazyColumn(modifier = Modifier.padding(horizontal = 6.dp)) {
+                items(notes) { note ->
+                    NoteRow(note = note, onNoteClicked = {})
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun NoteRow(
+    modifier: Modifier = Modifier,
+    note: Note,
+    onNoteClicked: (Note) -> Unit
+) {
+    Surface(
+        modifier
+            .padding(4.dp)
+            .clip(shape = RoundedCornerShape(topEnd = 33.dp, bottomStart = 33.dp))
+            .fillMaxWidth(),
+        color = Color(0xFFDFE6EB)
+    ) {
+        Column(modifier = modifier
+            .clickable { }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalAlignment = Alignment.Start) {
+            Text(
+                text = note.title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = note.description,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d, MMM")),
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 fun NoteScreenPreview() {
-    NoteScreen()
+    NoteScreen(notes = NoteDataSource().loadNotes(), onAddNote = {}, onRemoveNote = {})
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JetNoteApp</string>
+    <string name="lbl_save">Save</string>
 </resources>
