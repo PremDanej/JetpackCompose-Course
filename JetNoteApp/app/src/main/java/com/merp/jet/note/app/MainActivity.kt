@@ -4,14 +4,14 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import com.merp.jet.note.app.model.Note
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.merp.jet.note.app.screen.NoteScreen
+import com.merp.jet.note.app.screen.NoteViewModel
 import com.merp.jet.note.app.ui.theme.JetNoteAppTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -24,21 +24,27 @@ class MainActivity : ComponentActivity() {
             JetNoteAppTheme {
                 Column {
                     MyApp {
-                        val notes = remember {
-                            mutableStateListOf<Note>()
-                        }
-                        NoteScreen(notes = notes,
-                            onAddNote = {
-                                notes.add(it)
-                            },
-                            onRemoveNote = {
-                                notes.remove(it)
-                            })
+                        val noteViewModel: NoteViewModel by viewModels()
+                        NotesApp(noteViewModel)
                     }
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
+    val noteList = noteViewModel.getAllNotes()
+    NoteScreen(notes = noteList,
+        onAddNote = {
+            noteViewModel.addNote(it)
+        },
+        onRemoveNote = {
+            noteViewModel.removeNote(it)
+        })
 }
 
 @Composable
