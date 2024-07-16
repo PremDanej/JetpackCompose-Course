@@ -8,7 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import com.merp.jet.note.app.data.NoteDataSource
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import com.merp.jet.note.app.model.Note
 import com.merp.jet.note.app.screen.NoteScreen
 import com.merp.jet.note.app.ui.theme.JetNoteAppTheme
 
@@ -22,7 +24,16 @@ class MainActivity : ComponentActivity() {
             JetNoteAppTheme {
                 Column {
                     MyApp {
-                        NoteScreen(notes = NoteDataSource().loadNotes(), onAddNote = {}, onRemoveNote = {})
+                        val notes = remember {
+                            mutableStateListOf<Note>()
+                        }
+                        NoteScreen(notes = notes,
+                            onAddNote = {
+                                notes.add(it)
+                            },
+                            onRemoveNote = {
+                                notes.remove(it)
+                            })
                     }
                 }
             }

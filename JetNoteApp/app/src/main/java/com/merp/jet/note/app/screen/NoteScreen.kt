@@ -1,6 +1,7 @@
 package com.merp.jet.note.app.screen
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +54,7 @@ fun NoteScreen(
     var description by remember {
         mutableStateOf("")
     }
+    val context = LocalContext.current
 
     Column(modifier = Modifier.padding(0.dp)) {
         TopAppBar(
@@ -91,16 +94,19 @@ fun NoteScreen(
 
             NoteButton(text = stringResource(id = R.string.lbl_save), onClick = {
                 if (title.isNotEmpty() && description.isNotEmpty()) {
-                    // save the list
+                    onAddNote(Note(title = title, description = description))
                     title = ""
                     description = ""
+                    Toast.makeText(context,"Added",Toast.LENGTH_SHORT).show()
                 }
             })
 
             HorizontalDivider(modifier = Modifier.padding(10.dp))
             LazyColumn(modifier = Modifier.padding(horizontal = 6.dp)) {
                 items(notes) { note ->
-                    NoteRow(note = note, onNoteClicked = {})
+                    NoteRow(note = note, onNoteClicked = {
+                        onRemoveNote(note)
+                    })
                 }
             }
         }
@@ -122,7 +128,9 @@ fun NoteRow(
         color = Color(0xFFDFE6EB)
     ) {
         Column(modifier = modifier
-            .clickable { }
+            .clickable {
+                onNoteClicked(note)
+            }
             .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.Start) {
             Text(
