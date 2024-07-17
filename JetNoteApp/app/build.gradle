@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt") // added
+    id("com.google.dagger.hilt.android") // added
 }
 
 android {
@@ -57,6 +59,8 @@ dependencies {
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
     implementation libs.my.view.model // added
+    implementation libs.com.google.dagger // added
+    implementation libs.kapt.compiler // added
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
