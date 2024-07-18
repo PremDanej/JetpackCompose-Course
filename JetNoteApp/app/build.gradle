@@ -58,9 +58,6 @@ dependencies {
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
-    implementation libs.my.view.model // added
-    implementation libs.com.google.dagger // added
-    kapt(libs.kapt.compiler)
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -68,4 +65,20 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
+
+    // Extra
+    implementation libs.my.view.model
+
+    // Hilt & Dagger
+    implementation libs.com.google.dagger
+    kapt(libs.kapt.compiler)
+
+    // Room
+    implementation libs.room.runtime
+    annotationProcessor libs.room.processor
+
+    // Coroutines
+    implementation libs.coroutines.core
+    implementation libs.coroutines.android
+    implementation libs.coroutines.play.service
 }
