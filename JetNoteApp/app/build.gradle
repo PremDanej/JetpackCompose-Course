@@ -60,7 +60,7 @@ dependencies {
     implementation libs.androidx.material3
     implementation libs.my.view.model // added
     implementation libs.com.google.dagger // added
-    implementation libs.kapt.compiler // added
+    kapt(libs.kapt.compiler)
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
