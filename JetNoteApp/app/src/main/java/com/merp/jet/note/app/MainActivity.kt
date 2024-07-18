@@ -13,9 +13,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.merp.jet.note.app.screen.NoteScreen
 import com.merp.jet.note.app.screen.NoteViewModel
 import com.merp.jet.note.app.ui.theme.JetNoteAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
