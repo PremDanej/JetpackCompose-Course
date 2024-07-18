@@ -38,7 +38,6 @@ import com.merp.jet.note.app.componenets.NoteButton
 import com.merp.jet.note.app.componenets.NoteInputText
 import com.merp.jet.note.app.data.NoteDataSource
 import com.merp.jet.note.app.model.Note
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
@@ -141,10 +140,10 @@ fun NoteRow(
                 text = note.description,
                 style = MaterialTheme.typography.bodyMedium
             )
-            Text(
+            /*Text(
                 text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d, MMM")),
                 style = MaterialTheme.typography.bodySmall
-            )
+            )*/
         }
     }
 }
