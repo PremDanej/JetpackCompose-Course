@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt") // added
     id("com.google.dagger.hilt.android") // added
+    id("androidx.room")
+    // id ("com.google.devtools.ksp")
 }
 
 android {
@@ -46,6 +48,9 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    room {
+        schemaDirectory "$projectDir/schemas"
+    }
 }
 
 dependencies {
@@ -75,7 +80,10 @@ dependencies {
 
     // Room
     implementation libs.room.runtime
-    annotationProcessor libs.room.processor
+    implementation libs.room.ktx
+
+    annotationProcessor libs.room.compiler
+    kapt(libs.room.compiler)
 
     // Coroutines
     implementation libs.coroutines.core

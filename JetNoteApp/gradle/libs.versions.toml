@@ -10,7 +10,8 @@ activityCompose = "1.9.0"
 composeBom = "2024.04.01"
 hilt = "2.48"
 room = "2.6.1"
-coroutines = "1.3.9"
+coroutines = "1.7.3"
+ksp = "1.8.10-1.0.9"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,7 +36,8 @@ kapt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", v
 
 # Room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" } # added
-room-processor = { group = "androidx.room", name = "room-compiler", version.ref = "room" } # added
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" } # added
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" } # added
 
 # Coroutine
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -46,3 +48,5 @@ coroutines-play-service = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 com-google-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" } # Hilt
+androidx-room = { id = "androidx.room", version.ref = "room" } # Room
+# devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"} # Enabled KSP
