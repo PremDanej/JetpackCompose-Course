@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
 import com.merp.jet.note.app.screen.NoteScreen
 import com.merp.jet.note.app.screen.NoteViewModel
 import com.merp.jet.note.app.ui.theme.JetNoteAppTheme
@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
             JetNoteAppTheme {
                 Column {
                     MyApp {
-                        val noteViewModel: NoteViewModel by viewModels()
+                        // val noteViewModel = viewModel<NoteViewModel>() also work
+                         val noteViewModel: NoteViewModel by viewModels()
                         NotesApp(noteViewModel)
                     }
                 }
@@ -38,8 +39,8 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
-    val noteList = noteViewModel.getAllNotes()
+fun NotesApp(noteViewModel: NoteViewModel) {
+    val noteList = noteViewModel.noteList.collectAsState().value
     NoteScreen(notes = noteList,
         onAddNote = {
             noteViewModel.addNote(it)
