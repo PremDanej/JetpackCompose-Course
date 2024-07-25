@@ -1,6 +1,7 @@
 package com.merp.jet.trivia.di
 
 import com.merp.jet.trivia.network.QuestionApi
+import com.merp.jet.trivia.repository.QuestionRepository
 import com.merp.jet.trivia.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -13,6 +14,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideQuestionRepository(api: QuestionApi) = QuestionRepository(api)
 
     @Singleton
     @Provides
