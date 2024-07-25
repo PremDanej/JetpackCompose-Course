@@ -5,12 +5,12 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.3"
-activityCompose = "1.9.0"
+lifecycleRuntimeKtx = "2.8.4"
+activityCompose = "1.9.1"
 composeBom = "2024.06.00"
 coroutines = "1.7.3"
-lifecycleScope = "2.8.3"
-hilt = "2.48"
+lifecycleScope = "2.8.4"
+hilt = "2.49"
 retrofit = "2.9.0"
 
 [libraries]
@@ -41,6 +41,7 @@ livecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmode
 # Dagger Hilt
 dagger-hilt = {group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
 dagger-hilt-compiler = {group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt"}
+dagger-hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0"}
 
 # Retrofit
 squareup-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}

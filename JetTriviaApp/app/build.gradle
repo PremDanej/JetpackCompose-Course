@@ -75,6 +75,7 @@ dependencies {
     // Dagger & Hilt
     implementation libs.dagger.hilt
     kapt libs.dagger.hilt.compiler
+    implementation libs.dagger.hilt.navigation
 
     // Retrofit
     implementation libs.squareup.retrofit
