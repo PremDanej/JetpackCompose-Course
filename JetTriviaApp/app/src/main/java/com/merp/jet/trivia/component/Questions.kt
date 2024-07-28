@@ -1,6 +1,5 @@
 package com.merp.jet.trivia.component
 
-import android.provider.CalendarContract
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -237,7 +237,7 @@ fun ShowProgress(score: Int = 12) {
     )
 
     val progressFactor by remember(score) {
-        mutableStateOf(score * 0.005f)
+        mutableFloatStateOf(score * 0.005f)
     }
 
     Row(
