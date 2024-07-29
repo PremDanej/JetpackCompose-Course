@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -54,21 +55,32 @@ fun Questions(viewModel: QuestionsViewModel) {
     val questionIndex = remember {
         mutableIntStateOf(0)
     }
-    if (viewModel.data.value.loading == true) {
-        CircularProgressIndicator()
-    } else {
-        val question = try {
-            questions?.get(questionIndex.intValue)
-        } catch (ex: Exception) {
-            null
-        }
-        if (questions != null) {
-            QuestionDisplay(
-                question = question!!,
-                questionIndex = questionIndex,
-                viewModel = viewModel
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = AppColors.mDarkPurple
+    ) {
+        if (viewModel.data.value.loading == true) {
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                questionIndex.intValue += 1
+                CircularProgressIndicator(color = AppColors.mOffWhite)
+            }
+        } else {
+            val question = try {
+                questions?.get(questionIndex.intValue)
+            } catch (ex: Exception) {
+                null
+            }
+            if (questions != null) {
+                QuestionDisplay(
+                    question = question!!,
+                    questionIndex = questionIndex,
+                    viewModel = viewModel
+                ) {
+                    questionIndex.intValue += 1
+                }
             }
         }
     }
@@ -98,116 +110,111 @@ fun QuestionDisplay(
     }
 
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-    Surface(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(),
-        color = AppColors.mDarkPurple
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
-        ) {
-            if (questionIndex.value > 3) ShowProgress(score = questionIndex.value)
-            QuestionTracker(
-                counter = questionIndex.value,
-                outOff = viewModel.getTotalQuestionCount()
-            )
-            DrawDottedLine(pathEffect = pathEffect)
-            Column(modifier = Modifier.padding(top = 5.dp)) {
-                Text(
-                    text = question.question,
-                    color = AppColors.mOffWhite,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(fraction = 0.3f)
-                        .align(alignment = Alignment.Start)
-                )
 
-                // choices
-                choicesState.forEachIndexed { index, answerText ->
-                    Row(
-                        modifier = Modifier
-                            .padding(3.dp)
-                            .fillMaxWidth()
-                            .height(45.dp)
-                            .border(
-                                width = 4.dp, brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        AppColors.mOffDarkPurple,
-                                        AppColors.mOffDarkPurple
-                                    )
-                                ), shape = RoundedCornerShape(15.dp)
-                            )
-                            .clip(
-                                RoundedCornerShape(
-                                    topStartPercent = 50,
-                                    topEndPercent = 50,
-                                    bottomStartPercent = 50,
-                                    bottomEndPercent = 50
-                                )
-                            )
-                            .background(color = Color.Transparent),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (answerState.value == index),
-                            onClick = { updateAnswer(index) },
-                            modifier = Modifier.padding(16.dp),
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = if (correctAnswerState.value == true && index == answerState.value) {
-                                    Color.Green.copy(alpha = 0.5f)
-                                } else {
-                                    Color.Red.copy(alpha = 0.5f)
-                                },
-                                unselectedColor = AppColors.mOffWhite
-                            )
-                        )
-                        val annotatedString = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Light,
-                                    color = if (correctAnswerState.value == true && index == answerState.value) {
-                                        Color.Green
-                                    } else if (correctAnswerState.value == false && index == answerState.value) {
-                                        Color.Red
-                                    } else {
-                                        AppColors.mOffWhite
-                                    },
-                                    fontSize = 17.sp
-                                )
-                            ) {
-                                append(answerText)
-                            }
-                        }
-                        Text(text = annotatedString, modifier = Modifier.padding(6.dp))
-                    }
-                }
-                Button(
-                    onClick = {
-                        onNextClicked(questionIndex.value)
-                    },
+    Column(
+        modifier = Modifier.padding(12.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        if (questionIndex.value > 3) ShowProgress(score = questionIndex.value)
+        QuestionTracker(
+            counter = questionIndex.value,
+            outOff = viewModel.getTotalQuestionCount()
+        )
+        DrawDottedLine(pathEffect = pathEffect)
+        Column(modifier = Modifier.padding(top = 5.dp)) {
+            Text(
+                text = question.question,
+                color = AppColors.mOffWhite,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(fraction = 0.3f)
+                    .align(alignment = Alignment.Start)
+            )
+
+            // choices
+            choicesState.forEachIndexed { index, answerText ->
+                Row(
                     modifier = Modifier
                         .padding(3.dp)
-                        .align(alignment = Alignment.CenterHorizontally),
-                    shape = RoundedCornerShape(34.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AppColors.mLightBlue
-                    )
+                        .fillMaxWidth()
+                        .height(45.dp)
+                        .border(
+                            width = 4.dp, brush = Brush.linearGradient(
+                                colors = listOf(
+                                    AppColors.mOffDarkPurple,
+                                    AppColors.mOffDarkPurple
+                                )
+                            ), shape = RoundedCornerShape(15.dp)
+                        )
+                        .clip(
+                            RoundedCornerShape(
+                                topStartPercent = 50,
+                                topEndPercent = 50,
+                                bottomStartPercent = 50,
+                                bottomEndPercent = 50
+                            )
+                        )
+                        .background(color = Color.Transparent),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Next",
-                        modifier = Modifier.padding(4.dp),
-                        color = AppColors.mOffWhite,
-                        fontSize = 17.sp
+                    RadioButton(
+                        selected = (answerState.value == index),
+                        onClick = { updateAnswer(index) },
+                        modifier = Modifier.padding(16.dp),
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = if (correctAnswerState.value == true && index == answerState.value) {
+                                Color.Green.copy(alpha = 0.5f)
+                            } else {
+                                Color.Red.copy(alpha = 0.5f)
+                            },
+                            unselectedColor = AppColors.mOffWhite
+                        )
                     )
+                    val annotatedString = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Light,
+                                color = if (correctAnswerState.value == true && index == answerState.value) {
+                                    Color.Green
+                                } else if (correctAnswerState.value == false && index == answerState.value) {
+                                    Color.Red
+                                } else {
+                                    AppColors.mOffWhite
+                                },
+                                fontSize = 17.sp
+                            )
+                        ) {
+                            append(answerText)
+                        }
+                    }
+                    Text(text = annotatedString, modifier = Modifier.padding(6.dp))
                 }
+            }
+            Button(
+                onClick = {
+                    onNextClicked(questionIndex.value)
+                },
+                modifier = Modifier
+                    .padding(3.dp)
+                    .align(alignment = Alignment.CenterHorizontally),
+                shape = RoundedCornerShape(34.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = AppColors.mLightBlue
+                )
+            ) {
+                Text(
+                    text = "Next",
+                    modifier = Modifier.padding(4.dp),
+                    color = AppColors.mOffWhite,
+                    fontSize = 17.sp
+                )
             }
         }
     }
+
 }
 
 @Composable
@@ -270,7 +277,12 @@ fun ShowProgress(score: Int = 12) {
             contentPadding = PaddingValues(1.dp),
             modifier = Modifier
                 .fillMaxWidth(progressFactor)
-                .background(brush = gradient),
+                .background(brush = gradient,
+                    shape = RoundedCornerShape(
+                        topEndPercent = 50,
+                        bottomEndPercent = 50
+                    )
+                ),
             enabled = false,
             elevation = null,
             colors = ButtonDefaults.buttonColors(
