@@ -1,4 +1,4 @@
-package com.merp.jet.weather.forecast.app.screens
+package com.merp.jet.weather.forecast.app.screens.splash
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable

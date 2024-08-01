@@ -1,4 +1,4 @@
-package com.merp.jet.weather.forecast.app.screens
+package com.merp.jet.weather.forecast.app.screens.main
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

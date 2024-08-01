@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.merp.jet.weather.forecast.app.screens.MainScreen
-import com.merp.jet.weather.forecast.app.screens.WeatherSplashScreen
+import com.merp.jet.weather.forecast.app.screens.main.MainScreen
+import com.merp.jet.weather.forecast.app.screens.splash.WeatherSplashScreen
 
 @Composable
 fun WeatherNavigation() {
