@@ -1,9 +1,11 @@
 package com.merp.jet.weather.forecast.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.merp.jet.weather.forecast.app.MainViewModel
 import com.merp.jet.weather.forecast.app.screens.main.MainScreen
 import com.merp.jet.weather.forecast.app.screens.splash.WeatherSplashScreen
 
@@ -15,7 +17,8 @@ fun WeatherNavigation() {
             WeatherSplashScreen(navController = navController)
         }
         composable(WeatherScreens.MainScreen.name) {
-            MainScreen(navController = navController)
+            val mainViewModel = hiltViewModel<MainViewModel>()
+            MainScreen(navController = navController, mainViewModel)
         }
     }
 }
