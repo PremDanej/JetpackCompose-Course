@@ -1,6 +1,7 @@
 package com.merp.jet.weather.forecast.app.network
 
 import com.merp.jet.weather.forecast.app.model.WeatherItem
+import com.merp.jet.weather.forecast.app.model.WeatherObject
 import com.merp.jet.weather.forecast.app.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,5 +15,5 @@ interface WeatherApi {
         @Query("q") query: String,
         @Query("appid") appid: String = Constants.API_KEY,
         @Query("units") units: String = "imperial"
-    ): WeatherItem
+    ): WeatherObject
 }
