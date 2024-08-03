@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.merp.jet.weather.forecast.app.MainViewModel
 import com.merp.jet.weather.forecast.app.data.DataOrException
 import com.merp.jet.weather.forecast.app.model.Weather
 import com.merp.jet.weather.forecast.app.widgets.WeatherAppBar

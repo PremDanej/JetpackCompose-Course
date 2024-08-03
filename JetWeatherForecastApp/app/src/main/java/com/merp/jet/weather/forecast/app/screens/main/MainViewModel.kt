@@ -1,14 +1,10 @@
-package com.merp.jet.weather.forecast.app
+package com.merp.jet.weather.forecast.app.screens.main
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.merp.jet.weather.forecast.app.repository.WeatherRepository
 import com.merp.jet.weather.forecast.app.data.DataOrException
 import com.merp.jet.weather.forecast.app.model.Weather
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

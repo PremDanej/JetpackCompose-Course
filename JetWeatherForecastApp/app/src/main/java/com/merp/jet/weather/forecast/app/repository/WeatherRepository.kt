@@ -1,4 +1,4 @@
-package com.merp.jet.weather.forecast.app
+package com.merp.jet.weather.forecast.app.repository
 
 import com.merp.jet.weather.forecast.app.data.DataOrException
 import com.merp.jet.weather.forecast.app.model.Weather
