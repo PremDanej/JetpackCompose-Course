@@ -13,6 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.merp.jet.weather.forecast.app.navigation.WeatherNavigation
 import com.merp.jet.weather.forecast.app.ui.theme.JetWeatherForecastTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,21 +29,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Preview
 @Composable
 fun WeatherApp() {
     JetWeatherForecastTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Surface(
-                modifier = Modifier
-                    .padding(innerPadding)
+        Surface(
+            modifier = Modifier
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    WeatherNavigation()
-                }
+                WeatherNavigation()
             }
         }
     }
