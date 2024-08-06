@@ -1,14 +1,20 @@
 package com.merp.jet.weather.forecast.app.screens.main
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -22,8 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -116,6 +125,73 @@ fun MainContent(data: Weather) {
         HumidityWindPressureRow(weather = weatherItem)
         HorizontalDivider(thickness = 0.5.dp)
         DayNightRow(weather = weatherItem)
+        Text(
+            text = "This Week",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+        WeatherDataRow(data = data.list)
+    }
+}
+
+@Composable
+fun WeatherDataRow(data: List<WeatherItem>) {
+    LazyColumn(modifier = Modifier, contentPadding = PaddingValues(1.dp)) {
+        items(items = data) {
+            WeatherDetail(item = it)
+        }
+    }
+}
+
+@Composable
+fun WeatherDetail(item: WeatherItem) {
+    val imageUrl = Constants.ICON_URL + "${item.weather[0].icon}.png"
+    Surface(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+            .padding(6.dp)
+            .fillMaxWidth(),
+        border = BorderStroke(0.5.dp, Color.LightGray),
+        shape = RoundedCornerShape(10.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = formatDate(item.dt).split(",")[0],
+            )
+            WeatherStateImage(imageUrl = imageUrl)
+            Text(
+                text = item.weather[0].description,
+                modifier = Modifier
+                    .background(Color(0xFFFFC400), shape = CircleShape)
+                    .padding(horizontal = 10.dp)
+            )
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Blue.copy(alpha = 0.7f),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
+                        append(formatDecimals(item.temp.max) + "°")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.LightGray,
+                        )
+                    ) {
+                        append(formatDecimals(item.temp.min) + "°")
+                    }
+                },
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
     }
 }
 
