@@ -41,6 +41,7 @@ import com.merp.jet.weather.forecast.app.R
 import com.merp.jet.weather.forecast.app.data.DataOrException
 import com.merp.jet.weather.forecast.app.model.Weather
 import com.merp.jet.weather.forecast.app.model.WeatherItem
+import com.merp.jet.weather.forecast.app.navigation.WeatherScreens
 import com.merp.jet.weather.forecast.app.utils.Constants
 import com.merp.jet.weather.forecast.app.utils.formatDate
 import com.merp.jet.weather.forecast.app.utils.formatDateTime
@@ -69,6 +70,9 @@ fun MainScaffold(weather: Weather, navController: NavController) {
             WeatherAppBar(
                 title = weather.city.name + ", ${weather.city.country}",
                 navController = navController,
+                onAddActionClicked = {
+                    navController.navigate(WeatherScreens.SearchScreen.name)
+                }
             ) {
                 Log.d("Back Btn ", "MainScaffold: CLicked")
             }
@@ -102,7 +106,7 @@ fun MainContent(data: Weather) {
                 .padding(6.dp)
         )
         Surface(
-            onClick = { /*TODO*/ },
+            onClick = { },
             modifier = Modifier
                 .padding(4.dp)
                 .size(200.dp),
