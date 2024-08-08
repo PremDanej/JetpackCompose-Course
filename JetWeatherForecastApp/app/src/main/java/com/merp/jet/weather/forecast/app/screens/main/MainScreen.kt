@@ -49,11 +49,16 @@ import com.merp.jet.weather.forecast.app.utils.formatDecimals
 import com.merp.jet.weather.forecast.app.widgets.WeatherAppBar
 
 @Composable
-fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()) {
+fun MainScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
+) {
+    Log.d("TAG CITY", "MainScreen: $city")
     val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ) {
-        value = mainViewModel.getWeatherData("Moscow")
+        value = mainViewModel.getWeatherData(city = city!!)
     }.value
 
     if (weatherData.loading == true) {

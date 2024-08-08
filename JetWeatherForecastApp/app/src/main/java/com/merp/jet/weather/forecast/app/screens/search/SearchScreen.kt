@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.merp.jet.weather.forecast.app.navigation.WeatherScreens
 import com.merp.jet.weather.forecast.app.widgets.WeatherAppBar
 
 @Composable
@@ -50,8 +51,12 @@ fun SearchScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SearchBar {
-                    Log.d("TAG", "SearchScreen: $it")
+                SearchBar { city ->
+                    /*navController.popBackStack(
+                        route = WeatherScreens.MainScreen.name + "/$city",
+                        inclusive = true
+                    )*/
+                    navController.navigate(route = WeatherScreens.MainScreen.name + "/$city")
                 }
             }
         }
