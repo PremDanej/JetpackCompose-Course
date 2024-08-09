@@ -1,7 +1,6 @@
 package com.merp.jet.weather.forecast.app.widgets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.absolutePadding
@@ -19,6 +18,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -28,12 +28,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,7 +44,6 @@ fun WeatherAppBar(
     title: String = stringResource(id = R.string.app_name),
     icon: ImageVector? = null,
     iSMainScreen: Boolean = true,
-    elevation: Dp = 0.dp,
     navController: NavController,
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
@@ -61,7 +58,7 @@ fun WeatherAppBar(
         title = {
             Text(
                 text = title,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
             )
         },
@@ -73,26 +70,25 @@ fun WeatherAppBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 IconButton(onClick = { showDialog.value = true }) {
                     Icon(
                         imageVector = Icons.Rounded.MoreVert,
                         contentDescription = "More",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             } else Box {}
         },
         navigationIcon = {
             if (icon != null) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onButtonClicked.invoke() }) {
                     Icon(
                         imageVector = icon,
                         contentDescription = "Back",
-                        tint = Color.Black,
-                        modifier = Modifier.clickable { onButtonClicked.invoke() }
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -121,10 +117,15 @@ fun ShowSettingDropDownMenu(
             },
             modifier = Modifier
                 .width(120.dp)
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             items.forEachIndexed { _, element ->
-                DropdownMenuItem(text = { Text(text = element) },
+                DropdownMenuItem(text = {
+                    Text(
+                        text = element,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                     onClick = {
                         expanded.value = false
                         showDialog.value = false
@@ -143,7 +144,7 @@ fun ShowSettingDropDownMenu(
                                 "Favorites" -> Icons.Default.Favorite
                                 else -> Icons.Default.Settings
                             }, contentDescription = "Leading Icon",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 )
