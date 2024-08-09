@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.merp.jet.weather.forecast.app.R
+import com.merp.jet.weather.forecast.app.navigation.WeatherScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,6 +128,13 @@ fun ShowSettingDropDownMenu(
                     onClick = {
                         expanded.value = false
                         showDialog.value = false
+                        navController.navigate(
+                            route = when (element) {
+                                "About" -> WeatherScreens.AboutScreen.name
+                                "Favorites" -> WeatherScreens.FavoriteScreen.name
+                                else -> WeatherScreens.SettingsScreen.name
+                            }
+                        )
                     },
                     leadingIcon = {
                         Icon(
@@ -134,7 +142,8 @@ fun ShowSettingDropDownMenu(
                                 "About" -> Icons.Default.Info
                                 "Favorites" -> Icons.Default.Favorite
                                 else -> Icons.Default.Settings
-                            }, contentDescription = "Leading Icon"
+                            }, contentDescription = "Leading Icon",
+                            tint = Color.Black
                         )
                     }
                 )
