@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.merp.jet.weather.forecast.app.model.Favorite
 import com.merp.jet.weather.forecast.app.repository.WeatherDbRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class FavoriteViewModel @Inject constructor(private val repository: WeatherDbRepository) :
     ViewModel() {
 
@@ -31,7 +33,7 @@ class FavoriteViewModel @Inject constructor(private val repository: WeatherDbRep
         }
     }
 
-    suspend fun insertFavorite(favorite: Favorite) =
+    fun insertFavorite(favorite: Favorite) =
         viewModelScope.launch { repository.insertFavorite(favorite) }
 
     suspend fun updateFavorite(favorite: Favorite) =
