@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -28,15 +29,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.merp.jet.weather.forecast.app.R
+import com.merp.jet.weather.forecast.app.model.Favorite
 import com.merp.jet.weather.forecast.app.navigation.WeatherScreens
+import com.merp.jet.weather.forecast.app.screens.favorite.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +50,7 @@ fun WeatherAppBar(
     icon: ImageVector? = null,
     iSMainScreen: Boolean = true,
     navController: NavController,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
@@ -89,6 +95,23 @@ fun WeatherAppBar(
                         imageVector = icon,
                         contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+            }
+            if (iSMainScreen) {
+                IconButton(onClick = {
+                    val dataList: List<String> = title.split(",")
+                    favoriteViewModel.insertFavorite(
+                        Favorite(
+                            dataList[0],
+                            dataList[1]
+                        )
+                    )
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        tint = Color.Red.copy(alpha = 0.6f),
                     )
                 }
             }
