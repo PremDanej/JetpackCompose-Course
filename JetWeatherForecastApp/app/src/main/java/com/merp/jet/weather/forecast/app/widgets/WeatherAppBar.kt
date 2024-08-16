@@ -1,5 +1,7 @@
 package com.merp.jet.weather.forecast.app.widgets
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +63,7 @@ fun WeatherAppBar(
     if (showDialog.value) {
         ShowSettingDropDownMenu(showDialog = showDialog, navController = navController)
     }
+    val context = LocalContext.current
 
     TopAppBar(
         title = {
@@ -99,24 +104,46 @@ fun WeatherAppBar(
                 }
             }
             if (iSMainScreen) {
-                IconButton(onClick = {
-                    val dataList: List<String> = title.split(",")
-                    favoriteViewModel.insertFavorite(
-                        Favorite(
-                            dataList[0],
-                            dataList[1]
+                val dataList: List<String> = title.split(",")
+                val isAlreadyFavList: List<Favorite> =
+                    favoriteViewModel.favList.collectAsState().value.filter { item ->
+                        (item.city == dataList[0])
+                    }
+                if (isAlreadyFavList.isEmpty()) {
+                    IconButton(onClick = {
+                        favoriteViewModel.insertFavorite(
+                            Favorite(
+                                dataList[0],
+                                dataList[1]
+                            )
                         )
-                    )
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite Icon",
-                        tint = Color.Red.copy(alpha = 0.6f),
-                    )
+                        showToast(context, "Added to Favorite")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "Favorite Icon",
+                            tint = Color.Red.copy(alpha = 0.6f),
+                        )
+                    }
+                } else {
+                    IconButton(onClick = {
+                        favoriteViewModel.deleteFavorite(isAlreadyFavList[0])
+                        showToast(context, "Removed from Favorite")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Favorite Icon",
+                            tint = Color.Red.copy(alpha = 0.6f),
+                        )
+                    }
                 }
             }
         }
     )
+}
+
+fun showToast(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 @Composable
