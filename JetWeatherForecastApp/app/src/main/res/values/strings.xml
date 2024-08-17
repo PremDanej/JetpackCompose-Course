@@ -2,4 +2,5 @@
     <string name="app_name">JetWeatherForecast</string>
     <string name="lbl_app_version">Weather App v.0.1</string>
     <string name="lbl_weather_api">Weather API by https://openweathermap.org</string>
+    <string name="lbl_change_measurement">Change Units of Measurement</string>
 </resources>
