@@ -47,6 +47,7 @@ fun SettingsScreen(
         mutableStateOf(false)
     }
     val measurementUnits = listOf("Imperial (F)", "Metric (C)")
+    val choiceFromDb = settingsViewModel.unitList.collectAsState().value[0]
     var choiceState by remember {
         mutableStateOf("")
     }
