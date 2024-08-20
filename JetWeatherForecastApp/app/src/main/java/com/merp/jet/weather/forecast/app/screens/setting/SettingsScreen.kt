@@ -1,5 +1,6 @@
 package com.merp.jet.weather.forecast.app.screens.setting
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,13 +45,13 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
 
-    var unitToggleState by remember {
-        mutableStateOf(false)
-    }
-    val measurementUnits = listOf("Imperial (F)", "Metric (C)")
-    val choiceFromDb = settingsViewModel.unitList.collectAsState().value[0]
-    var choiceState by remember {
-        mutableStateOf("")
+    var unitToggleState: Boolean by remember { mutableStateOf(false) }
+    val measurementUnits: List<String> = listOf("Imperial (F)", "Metric (C)")
+    val choiceFromDb: List<Unit> = settingsViewModel.unitList.collectAsState().value
+    val defaultChoice: String =
+        if (choiceFromDb.isEmpty()) measurementUnits[0] else choiceFromDb[0].unit
+    var choiceState: String by remember {
+        mutableStateOf(defaultChoice)
     }
 
     Scaffold(topBar = {
