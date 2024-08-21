@@ -23,7 +23,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,9 +44,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.merp.jet.weather.forecast.app.R
 import com.merp.jet.weather.forecast.app.data.DataOrException
+import com.merp.jet.weather.forecast.app.model.Unit
 import com.merp.jet.weather.forecast.app.model.Weather
 import com.merp.jet.weather.forecast.app.model.WeatherItem
 import com.merp.jet.weather.forecast.app.navigation.WeatherScreens
+import com.merp.jet.weather.forecast.app.screens.setting.SettingsViewModel
 import com.merp.jet.weather.forecast.app.utils.Constants
 import com.merp.jet.weather.forecast.app.utils.formatDate
 import com.merp.jet.weather.forecast.app.utils.formatDateTime
@@ -52,24 +59,36 @@ import com.merp.jet.weather.forecast.app.widgets.WeatherAppBar
 fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     city: String?
 ) {
-    Log.d("TAG CITY", "MainScreen: $city")
-    val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
-        initialValue = DataOrException(loading = true)
-    ) {
-        value = mainViewModel.getWeatherData(city = city!!)
-    }.value
+    val curCity: String = if (city!!.isBlank()) "Seattle" else city
+    val unitFromDb: List<Unit> = settingsViewModel.unitList.collectAsState().value
+    var unit by remember {
+        mutableStateOf("imperial")
+    }
+    var isImperial by remember {
+        mutableStateOf(false)
+    }
+    if (unitFromDb.isNotEmpty()) {
+        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+        isImperial = unit == "imperial"
+        val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
+            initialValue = DataOrException(loading = true)
+        ) {
+            value = mainViewModel.getWeatherData(city = curCity, units = unit)
+        }.value
 
-    if (weatherData.loading == true) {
-        CircularProgressIndicator()
-    } else if (weatherData.data != null) {
-        MainScaffold(weatherData.data!!, navController)
+        if (weatherData.loading == true) {
+            CircularProgressIndicator()
+        } else if (weatherData.data != null) {
+            MainScaffold(weatherData.data!!, navController, isImperial = isImperial)
+        }
     }
 }
 
 @Composable
-fun MainScaffold(weather: Weather, navController: NavController) {
+fun MainScaffold(weather: Weather, navController: NavController, isImperial: Boolean) {
     Scaffold(modifier = Modifier,
         topBar = {
             WeatherAppBar(
@@ -87,13 +106,13 @@ fun MainScaffold(weather: Weather, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HorizontalDivider(thickness = 0.5.dp)
-            MainContent(weather)
+            MainContent(weather, isImperial)
         }
     }
 }
 
 @Composable
-fun MainContent(data: Weather) {
+fun MainContent(data: Weather, isImperial: Boolean) {
     val weatherItem = data.list[0]
     val imageUrl = Constants.ICON_URL + "${weatherItem.weather[0].icon}.png"
     Column(
@@ -131,7 +150,7 @@ fun MainContent(data: Weather) {
                 Text(text = weatherItem.weather[0].main, fontStyle = FontStyle.Italic)
             }
         }
-        HumidityWindPressureRow(weather = weatherItem)
+        HumidityWindPressureRow(weather = weatherItem, isImperial = isImperial)
         HorizontalDivider(thickness = 0.5.dp)
         DayNightRow(weather = weatherItem)
         Text(
@@ -249,7 +268,7 @@ fun DayNightRow(weather: WeatherItem) {
 }
 
 @Composable
-fun HumidityWindPressureRow(weather: WeatherItem) {
+fun HumidityWindPressureRow(weather: WeatherItem, isImperial: Boolean) {
     Row(
         modifier = Modifier
             .padding(12.dp)
@@ -286,7 +305,7 @@ fun HumidityWindPressureRow(weather: WeatherItem) {
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = "${weather.humidity} mph",
+                text = "${formatDecimals(weather.speed)} ${if (isImperial) "mph" else "m/s"}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
