@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.service)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -70,4 +72,24 @@ dependencies {
     implementation libs.firebase.analytics
     implementation libs.firebase.auth
     implementation libs.firebase.firestore
+
+    // Dagger-Hilt
+    implementation libs.dagger.hilt.android
+    ksp libs.dagger.hilt.compiler
+
+    // Androidx-Hilt
+    implementation libs.androidx.hilt.lifecycle.viewmodel
+    implementation libs.androidx.hilt.navigation.compose
+
+    // Coroutine
+    // More about coroutines -> https://kotlinlang.org/api/kotlinx.coroutines/
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.play.services
+
+    // ViewModel
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+
+    // Coil
+    implementation(libs.coil.compose)
 }
