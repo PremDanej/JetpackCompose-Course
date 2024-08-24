@@ -78,7 +78,7 @@ dependencies {
     ksp libs.dagger.hilt.compiler
 
     // Androidx-Hilt
-    implementation libs.androidx.hilt.lifecycle.viewmodel
+    ksp libs.androidx.hilt.compiler
     implementation libs.androidx.hilt.navigation.compose
 
     // Coroutine

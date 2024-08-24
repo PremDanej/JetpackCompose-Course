@@ -12,7 +12,6 @@ composeBom = "2024.08.00"
 googleGms = "4.4.2"
 ksp = "1.9.0-1.0.12"
 hiltAndroid = "2.49"
-hiltLifecycleViewmodel = "1.0.0-alpha03" #HileViewModel
 hiltNavigationCompose = "1.2.0" # HiltNavigation
 kotlinxCoroutines = "1.9.0-RC.2" # Coroutines
 coilCompose = "2.7.0" #Coil
@@ -47,7 +46,7 @@ dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 
 # Androidx-Hilt
-androidx-hilt-lifecycle-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltLifecycleViewmodel" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltNavigationCompose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 #Coroutines
