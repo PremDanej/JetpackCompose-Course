@@ -47,6 +47,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(2000L)
+        navController.navigate(ReaderScreens.LoginScreen.name)
     }
 
     Column(
