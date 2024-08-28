@@ -24,6 +24,22 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
+    // InputText value style
+    bodyLarge = TextStyle(
+        fontFamily = FontFamily(Font(grotesk)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp
+    ),
+    // InputText label style
+    bodySmall = TextStyle(
+        fontFamily = FontFamily(Font(grotesk)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    ),
 )
 
 // If not using typography then using this baseFont
