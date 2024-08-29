@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.merp.jet.my.pdf.reader.app.R
+import com.merp.jet.my.pdf.reader.app.components.ReaderLogo
 import com.merp.jet.my.pdf.reader.app.navigation.ReaderScreens
 import kotlinx.coroutines.delay
 
@@ -67,11 +68,7 @@ fun SplashScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(R.string.lbl_pdf_reader),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = Color.Red.copy(alpha = 0.7f)
-                )
+                ReaderLogo()
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = stringResource(R.string.lbl_change_yourself),
