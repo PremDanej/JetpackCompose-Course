@@ -2,4 +2,11 @@
     <string name="app_name">PDFReader</string>
     <string name="lbl_pdf_reader">PDF Reader</string>
     <string name="lbl_change_yourself">\"Change Yourself\"</string>
+    <string name="lbl_email">Email</string>
+    <string name="lbl_password">Password</string>
+    <string name="lbl_create_account">Create Account</string>
+    <string name="lbl_login">Login</string>
+    <string name="lbl_create_account_note">Please enter a valid email and password that is at least 6 characters</string>
+    <string name="lbl_sign_up">Sign up</string>
+    <string name="lbl_new_user">New User?</string>
 </resources>
