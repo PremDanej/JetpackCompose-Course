@@ -31,6 +31,29 @@ class LoginScreenViewModel : ViewModel() {
             } catch (ex: Exception) {
                 Log.d("FIREBASE", "signInWithEmailAndPassword: ${ex.message}")
             }
+        }
 
+    fun createUserWithEmailAndPassword(email: String, password: String, home: () -> Unit) =
+        viewModelScope.launch {
+            try {
+                if (_loading.value == false) {
+                    _loading.value = true
+
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                home()
+                            } else {
+                                Log.d(
+                                    "FIREBASE",
+                                    "createUserWithEmailAndPassword FAIL: ${task.result}"
+                                )
+                            }
+                            _loading.value = false
+                        }
+                }
+            } catch (ex: Exception) {
+                Log.d("FIREBASE", "createUserWithEmailAndPassword: ${ex.message}")
+            }
         }
 }

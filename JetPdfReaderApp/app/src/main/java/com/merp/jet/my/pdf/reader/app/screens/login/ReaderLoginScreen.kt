@@ -31,8 +31,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.merp.jet.my.pdf.reader.app.MainActivity
 import com.merp.jet.my.pdf.reader.app.R
 import com.merp.jet.my.pdf.reader.app.components.EmailInput
 import com.merp.jet.my.pdf.reader.app.components.PasswordInput
@@ -64,7 +66,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginScreenViewMod
             }
         } else {
             UserForm(loading = false, isCreateAccount = true) { email, password ->
-                // TODO: Create FB account
+                loginViewModel.createUserWithEmailAndPassword(email, password) {
+                    navController.navigate(ReaderScreens.HomeScreen.name)
+                }
             }
         }
 
