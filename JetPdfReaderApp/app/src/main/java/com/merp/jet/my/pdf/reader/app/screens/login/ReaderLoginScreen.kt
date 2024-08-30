@@ -31,14 +31,16 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.merp.jet.my.pdf.reader.app.R
 import com.merp.jet.my.pdf.reader.app.components.EmailInput
 import com.merp.jet.my.pdf.reader.app.components.PasswordInput
 import com.merp.jet.my.pdf.reader.app.components.ReaderLogo
+import com.merp.jet.my.pdf.reader.app.navigation.ReaderScreens
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, loginViewModel: LoginScreenViewModel = viewModel()) {
 
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
@@ -56,7 +58,9 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(50.dp))
         if (showLoginForm.value) {
             UserForm(loading = false, isCreateAccount = false) { email, password ->
-                // TODO: Login FB account
+                loginViewModel.signInWithEmailAndPassword(email, password) {
+                    navController.navigate(ReaderScreens.HomeScreen.name)
+                }
             }
         } else {
             UserForm(loading = false, isCreateAccount = true) { email, password ->
