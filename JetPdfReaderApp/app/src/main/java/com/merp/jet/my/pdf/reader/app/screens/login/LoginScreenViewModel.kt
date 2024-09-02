@@ -9,6 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.merp.jet.my.pdf.reader.app.data.MUser
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel : ViewModel() {
@@ -63,7 +64,15 @@ class LoginScreenViewModel : ViewModel() {
 
     private fun createUser(displayName: String?) {
         val userId: String = auth.currentUser?.uid.toString()
-        val user = mutableMapOf<String, Any>()
+        val user = MUser(
+            userId = userId,
+            displayName = displayName.toString(),
+            avatarUrl = "",
+            quote = "Life is good.",
+            profession = "Android Developer",
+            id = null
+        ).toMap()
+
         user["user_id"] = userId
         user["display_name"] = displayName.toString()
 
