@@ -11,7 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.merp.jet.my.pdf.reader.app.R
+import com.merp.jet.my.pdf.reader.app.navigation.ReaderScreens
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -39,7 +41,6 @@ fun HomeScreen(navController: NavController) {
         topBar = {
             ReaderAppBar(
                 title = stringResource(id = R.string.app_name),
-                showProfile = true,
                 navController = navController,
             )
         },
@@ -88,18 +89,19 @@ fun ReaderAppBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
         actions = {
-            if (showProfile) {
-                IconButton(onClick = { /*TODO add navigation*/ }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                        contentDescription = "Sign out",
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
+            IconButton(onClick = {
+                FirebaseAuth.getInstance().signOut().run {
+                    navController.navigate(ReaderScreens.LoginScreen.name)
                 }
+            }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.Logout,
+                    contentDescription = "Sign out",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
     )
-
 }
 
 @Composable
