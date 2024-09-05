@@ -1,17 +1,19 @@
 package com.merp.jet.my.pdf.reader.app.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,15 +30,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.merp.jet.my.pdf.reader.app.R
 import com.merp.jet.my.pdf.reader.app.navigation.ReaderScreens
+import java.util.Locale
 
+@Preview
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController = NavHostController(LocalContext.current)) {
     Scaffold(
         topBar = {
             ReaderAppBar(
@@ -48,23 +57,15 @@ fun HomeScreen(navController: NavController) {
             FABContent {}
         }
     ) { padding ->
-        Surface(Modifier.padding(padding)) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-                Arrangement.Center,
-                Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "HomeScreen",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
+        Surface(
+            Modifier
+                .padding(padding)
+        ) {
+            HomeContent(navController)
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,5 +115,64 @@ fun FABContent(onTap: (String) -> Unit) {
             imageVector = Icons.Default.Add,
             contentDescription = "Add a Book",
         )
+    }
+}
+
+@Composable
+fun TitleSection(
+    modifier: Modifier = Modifier,
+    label: String = stringResource(R.string.app_name)
+) {
+    Surface(modifier.padding(5.dp)) {
+        Column {
+            Text(text = label, style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
+        }
+    }
+}
+
+@Composable
+fun HomeContent(navController: NavController) {
+
+    val currentUserName =
+        if (!FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty())
+            FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+        else "Anonymous"
+
+    Column(
+        Modifier
+            .padding(2.dp)
+            .fillMaxSize(),
+        Arrangement.SpaceEvenly
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
+                .align(Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TitleSection(label = "Your reading \nactivity right now")
+            Spacer(modifier = Modifier.fillMaxWidth(0.65f))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "Icon",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clickable {
+                            navController.navigate(ReaderScreens.StatsScreen.name)
+                        }
+                )
+                Text(
+                    text = currentUserName.toString()
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Red.copy(0.9f)
+                )
+            }
+        }
     }
 }
