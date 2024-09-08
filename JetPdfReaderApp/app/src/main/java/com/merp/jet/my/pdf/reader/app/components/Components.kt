@@ -144,7 +144,8 @@ fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
 fun FABContent(onTap: (String) -> Unit) {
     FloatingActionButton(
         onClick = { onTap("") },
-        shape = RoundedCornerShape(50.dp)
+        shape = RoundedCornerShape(50.dp),
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer
     ) {
         Icon(
             imageVector = Icons.Default.Add,
