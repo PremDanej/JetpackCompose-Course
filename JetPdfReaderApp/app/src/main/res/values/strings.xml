@@ -10,4 +10,5 @@
     <string name="lbl_sign_up">Sign up</string>
     <string name="lbl_new_user">New User?</string>
     <string name="lbl_reading_activity">Your reading \nactivity right now</string>
+    <string name="lbl_reading_section">Reading Section</string>
 </resources>
