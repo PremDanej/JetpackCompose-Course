@@ -1,5 +1,6 @@
 package com.merp.jet.my.pdf.reader.app.components
 
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -151,7 +155,7 @@ fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
     val visible = passwordVisibility.value
     IconButton(onClick = { passwordVisibility.value = !visible }) {
         Icon(
-            imageVector = if (visible) Icons.Default.Close else Icons.Default.Done,
+            imageVector = if (visible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
             contentDescription = "Password"
         )
     }
@@ -188,14 +192,21 @@ fun TitleSection(
 fun ReaderAppBar(
     title: String,
     showProfile: Boolean = true,
-    navController: NavController
+    navController: NavController,
+    icon: ImageVector? = null,
+    onBackPressedCallback: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (showProfile) {
-                    Icon(imageVector = Icons.Default.Face, contentDescription = "Profile")
-                    Spacer(modifier = Modifier.width(10.dp))
+                    IconButton(onClick = {}) {
+                        Icon(imageVector = Icons.Default.Face, contentDescription = "Profile")
+                    }
+                } else {
+                    IconButton(onClick = onBackPressedCallback) {
+                        icon?.let { Icon(imageVector = it, contentDescription = "Icon") }
+                    }
                 }
                 Text(
                     text = title,
