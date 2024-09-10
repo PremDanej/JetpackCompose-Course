@@ -48,7 +48,9 @@ fun HomeScreen(navController: NavController = NavHostController(LocalContext.cur
             )
         },
         floatingActionButton = {
-            FABContent {}
+            FABContent {
+                navController.navigate(ReaderScreens.SearchScreen.name)
+            }
         }
     ) { padding ->
         Surface(Modifier.padding(padding)) {
