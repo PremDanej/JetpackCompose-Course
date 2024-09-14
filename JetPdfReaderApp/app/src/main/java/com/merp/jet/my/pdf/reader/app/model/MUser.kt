@@ -1,4 +1,4 @@
-package com.merp.jet.my.pdf.reader.app.data
+package com.merp.jet.my.pdf.reader.app.model
 
 data class MUser(
     val id: String?,

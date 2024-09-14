@@ -9,7 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.merp.jet.my.pdf.reader.app.data.MUser
+import com.merp.jet.my.pdf.reader.app.model.MUser
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel : ViewModel() {
