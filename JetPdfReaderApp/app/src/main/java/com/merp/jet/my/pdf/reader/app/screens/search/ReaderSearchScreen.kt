@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -42,7 +44,10 @@ import com.merp.jet.my.pdf.reader.app.model.MBook
 
 @Preview
 @Composable
-fun SearchScreen(navController: NavController = NavHostController(LocalContext.current)) {
+fun SearchScreen(
+    navController: NavController = NavHostController(LocalContext.current),
+    viewModel: BookSearchViewModel = hiltViewModel()
+) {
     Scaffold(
         topBar = {
             ReaderAppBar(
@@ -60,8 +65,8 @@ fun SearchScreen(navController: NavController = NavHostController(LocalContext.c
                 .padding(horizontal = 10.dp)
         ) {
             Column {
-                SearchForm() {
-                    Log.d("TAG", "SearchScreen: String $it")
+                SearchForm(viewModel = viewModel) { query ->
+                    viewModel.searchBooks(query)
                 }
 
                 Spacer(
@@ -70,7 +75,7 @@ fun SearchScreen(navController: NavController = NavHostController(LocalContext.c
                         .height(20.dp)
                 )
 
-                BookList()
+                BookList(navController,viewModel)
             }
         }
     }
@@ -81,6 +86,7 @@ fun SearchForm(
     modifier: Modifier = Modifier,
     loading: Boolean = false,
     hint: String = "Search",
+    viewModel: BookSearchViewModel,
     onSearch: (String) -> Unit = {}
 ) {
     Column {
@@ -91,6 +97,7 @@ fun SearchForm(
         }
 
         InputField(
+            modifier = modifier,
             valueState = searchQueryState, label = hint, enable = true,
             onAction = KeyboardActions {
                 if (!valid) return@KeyboardActions
@@ -104,7 +111,15 @@ fun SearchForm(
 }
 
 @Composable
-fun BookList() {
+fun BookList(navController: NavController, viewModel: BookSearchViewModel) {
+
+    if(viewModel.listOfBooks.value.loading == true){
+        Log.d("API", "BookList: LOADING")
+        CircularProgressIndicator()
+    }else{
+        Log.d("API", "SearchScreen: ${viewModel.listOfBooks.value.data}")
+    }
+
     val listOfBooks = listOf(
         MBook("abc", "Running", "You Suf Pathan", "Hello World"),
         MBook("xyz", "Hello", "M. Khalifa", "Hello World"),
