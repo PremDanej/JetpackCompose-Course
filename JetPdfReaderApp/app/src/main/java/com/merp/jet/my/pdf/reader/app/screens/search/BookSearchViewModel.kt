@@ -28,7 +28,7 @@ class BookSearchViewModel @Inject constructor(private val repository: BookReposi
         searchBooks("android")
     }
 
-    private fun searchBooks(query: String) {
+    internal fun searchBooks(query: String) {
         viewModelScope.launch(Dispatchers.Default) {
             if (query.isEmpty()) return@launch
             try {
