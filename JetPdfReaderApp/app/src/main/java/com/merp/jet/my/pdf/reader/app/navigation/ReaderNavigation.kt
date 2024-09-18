@@ -1,6 +1,7 @@
 package com.merp.jet.my.pdf.reader.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -8,6 +9,7 @@ import com.merp.jet.my.pdf.reader.app.screens.create.CreateAccountScreen
 import com.merp.jet.my.pdf.reader.app.screens.details.BookDetailsScreen
 import com.merp.jet.my.pdf.reader.app.screens.home.HomeScreen
 import com.merp.jet.my.pdf.reader.app.screens.login.LoginScreen
+import com.merp.jet.my.pdf.reader.app.screens.search.BookSearchViewModel
 import com.merp.jet.my.pdf.reader.app.screens.search.SearchScreen
 import com.merp.jet.my.pdf.reader.app.screens.splash.SplashScreen
 import com.merp.jet.my.pdf.reader.app.screens.stats.StatsScreen
@@ -34,7 +36,8 @@ fun ReaderNavigation() {
                 LoginScreen(navController = navController)
             }
             composable(ReaderScreens.SearchScreen.name) {
-                SearchScreen(navController = navController)
+                val searchViewModel = hiltViewModel<BookSearchViewModel>()
+                SearchScreen(navController = navController, viewModel = searchViewModel)
             }
             composable(ReaderScreens.UpdateScreen.name) {
                 BookUpdateScreen(navController = navController)
