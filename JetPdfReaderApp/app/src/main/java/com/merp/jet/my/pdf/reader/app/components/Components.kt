@@ -1,6 +1,5 @@
 package com.merp.jet.my.pdf.reader.app.components
 
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.StarBorder
@@ -114,7 +111,8 @@ fun InputField(
         label = { Text(text = label) },
         singleLine = isSingleLine,
         enabled = enable,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction)
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
+        keyboardActions = onAction
     )
 }
 
@@ -146,7 +144,8 @@ fun PasswordInput(
         visualTransformation = visualTransformation,
         trailingIcon = {
             PasswordVisibility(passwordVisibility)
-        }
+        },
+        keyboardActions = onAction
     )
 }
 
