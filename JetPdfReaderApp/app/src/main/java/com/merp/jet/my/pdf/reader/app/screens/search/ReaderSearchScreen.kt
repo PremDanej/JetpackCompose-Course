@@ -181,7 +181,7 @@ fun BookRow(
                     fontStyle = FontStyle.Italic
                 )
                 Text(
-                    text = "Computer",
+                    text = "${book.volumeInfo.categories}",
                     style = MaterialTheme.typography.labelLarge,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
