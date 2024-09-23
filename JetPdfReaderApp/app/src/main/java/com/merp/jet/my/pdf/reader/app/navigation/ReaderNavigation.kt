@@ -2,9 +2,12 @@ package com.merp.jet.my.pdf.reader.app.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavArgumentBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.merp.jet.my.pdf.reader.app.screens.create.CreateAccountScreen
 import com.merp.jet.my.pdf.reader.app.screens.details.BookDetailsScreen
 import com.merp.jet.my.pdf.reader.app.screens.home.HomeScreen
@@ -42,8 +45,13 @@ fun ReaderNavigation() {
             composable(ReaderScreens.UpdateScreen.name) {
                 BookUpdateScreen(navController = navController)
             }
-            composable(ReaderScreens.DetailsScreen.name) {
-                BookDetailsScreen(navController = navController)
+            composable(
+                route = "${ReaderScreens.DetailsScreen.name}/{bookId}",
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                backStackEntry.arguments?.getString("bookId").let {
+                    BookDetailsScreen(navController = navController, bookId = it.toString())
+                }
             }
             composable(ReaderScreens.StatsScreen.name) {
                 StatsScreen(navController = navController)
