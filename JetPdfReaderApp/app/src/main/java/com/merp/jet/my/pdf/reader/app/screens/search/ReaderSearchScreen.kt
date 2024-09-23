@@ -41,6 +41,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.merp.jet.my.pdf.reader.app.components.InputField
 import com.merp.jet.my.pdf.reader.app.components.ReaderAppBar
 import com.merp.jet.my.pdf.reader.app.model.Item
+import com.merp.jet.my.pdf.reader.app.navigation.ReaderScreens
 
 @Composable
 fun SearchScreen(
@@ -118,7 +119,7 @@ fun BookList(navController: NavController, viewModel: BookSearchViewModel = hilt
     } else {
         LazyColumn {
             items(listOfBooks) {
-                BookRow(it)
+                BookRow(it, navController)
             }
         }
     }
@@ -126,10 +127,13 @@ fun BookList(navController: NavController, viewModel: BookSearchViewModel = hilt
 
 @Composable
 fun BookRow(
-    book: Item
+    book: Item,
+    navController: NavController
 ) {
     Card(
-        onClick = {},
+        onClick = {
+            navController.navigate("${ReaderScreens.DetailsScreen.name}/${book.id}")
+        },
         Modifier.padding(vertical = 5.dp),
         colors = CardDefaults.cardColors(Color.Transparent),
         border = BorderStroke(0.5.dp, Color.LightGray),
